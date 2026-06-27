@@ -4,7 +4,7 @@ import { EmbeddingService } from './EmbeddingService.js';
 // Mock Transformers.js so it doesn't download 20MB of neural network during tests!
 vi.mock('@xenova/transformers', () => {
   return {
-    pipeline: vi.fn().mockResolvedValue(async (text: string, options: any) => {
+    pipeline: vi.fn().mockResolvedValue(async () => {
       // Return a fake Tensor object containing 384 dimensions
       return {
         data: new Float32Array(384).fill(0.5) 

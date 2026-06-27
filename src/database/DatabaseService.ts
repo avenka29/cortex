@@ -94,6 +94,25 @@ export class DatabaseService {
     vecStmt.run(BigInt(metaId), new Float32Array(embedding));
   }
 
+  /**
+   * Deletes all vector chunks associated with a specific file path.
+   */
+  public deleteVectorsForFile(referenceId: string) {
+    const idsToDelete = this.db.prepare(`SELECT rowid FROM vector_metadata WHERE reference_id = ?`).all(referenceId) as {rowid: number | bigint}[];
+    if (idsToDelete.length === 0) return;
+
+    const deleteMetadata = this.db.prepare(`DELETE FROM vector_metadata WHERE reference_id = ?`);
+    const deleteIndex = this.db.prepare(`DELETE FROM vector_index WHERE rowid = ?`);
+    
+    const transaction = this.db.transaction(() => {
+        deleteMetadata.run(referenceId);
+        for (const row of idsToDelete) {
+            deleteIndex.run(row.rowid);
+        }
+    });
+    transaction();
+  }
+
   public searchVectors(embedding: number[], limit: number = 5, threshold: number = 0.5, sourceTypes?: string[]) {
     // We execute an insanely fast SQL join across the Virtual Index and the Metadata table
     let sql = `
@@ -119,6 +138,21 @@ export class DatabaseService {
     sql += ` ORDER BY distance LIMIT ?`;
     params.push(limit);
 
-    return this.db.prepare(sql).all(...params) as any[];
+    const rows = this.db.prepare(sql).all(...params) as any[];
+    
+    // Cross-reference with Topological Graph
+    return rows.map(row => ({
+      ...row,
+      associated_entities: this.getAssociatedEntitiesForFile(row.reference_id)
+    }));
+  }
+
+  /**
+   * Scans the Topological Graph to see if any Entity explicitly tracks this file.
+   */
+  public getAssociatedEntitiesForFile(filePath: string): string[] {
+    const sql = `SELECT name FROM nodes WHERE content LIKE ?`;
+    const results = this.db.prepare(sql).all(`%${filePath}%`) as any[];
+    return results.map(r => r.name);
   }
 }

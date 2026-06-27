@@ -21,7 +21,8 @@ describe('VectorToolProvider', () => {
     // We mock the database to just return a dummy result instead of hitting SQLite
     mockDb = {
       saveVector: vi.fn(),
-      searchVectors: vi.fn().mockReturnValue([{ reference_id: 'mock.ts', content: 'mock content' }])
+      searchVectors: vi.fn().mockReturnValue([{ reference_id: 'mock.ts', content: 'mock content' }]),
+      deleteVectorsForFile: vi.fn()
     };
 
     // We mock the embedding service so it doesn't trigger a 20MB neural network download
@@ -35,10 +36,10 @@ describe('VectorToolProvider', () => {
     );
   });
 
-  it('should get definitions for two tools', () => {
+  it('should get definitions for three tools', () => {
     const defs = provider.getDefinitions();
-    expect(defs.length).toBe(2);
-    expect(defs.map(d => d.name)).toEqual(expect.arrayContaining(['index_file', 'semantic_search']));
+    expect(defs.length).toBe(3);
+    expect(defs.map(d => d.name)).toEqual(expect.arrayContaining(['index_file', 'index_directory', 'semantic_search']));
   });
 
   it('should execute semantic_search correctly', async () => {
@@ -46,7 +47,7 @@ describe('VectorToolProvider', () => {
     
     // Verify it called the ML engine and the DB in the correct order
     expect(mockEmbeddingService.generateEmbedding).toHaveBeenCalledWith('test');
-    expect(mockDb.searchVectors).toHaveBeenCalledWith([0.1, 0.2, 0.3], 5, 1.0, undefined);
+    expect(mockDb.searchVectors).toHaveBeenCalledWith([0.1, 0.2, 0.3], 5, 1.0, ['MARKDOWN']);
     
     // Verify the output matches MCP spec
     expect(result).toBeDefined();
@@ -57,7 +58,7 @@ describe('VectorToolProvider', () => {
   it('should return error for index_file if file does not exist', async () => {
     vi.mocked(fs.existsSync).mockReturnValue(false);
     
-    const result = await provider.handleCall('index_file', { filePath: 'fake.ts', sourceType: 'CODE' });
+    const result = await provider.handleCall('index_file', { filePath: 'fake.ts' });
     
     expect(result.isError).toBe(true);
     expect(result.content[0].text).toContain('not found');
@@ -70,7 +71,7 @@ describe('VectorToolProvider', () => {
     const bigString = "a".repeat(50) + "\n"; 
     vi.mocked(fs.readFileSync).mockReturnValue(bigString.repeat(30)); // ~1500 chars
     
-    const result = await provider.handleCall('index_file', { filePath: 'real.ts', sourceType: 'CODE' });
+    const result = await provider.handleCall('index_file', { filePath: 'real.ts' });
     
     expect(result.isError).toBeFalsy();
     // 1500 chars split by ~1000 max size should result in 2 chunks

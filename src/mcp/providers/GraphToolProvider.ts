@@ -56,6 +56,16 @@ export class GraphToolProvider implements ToolProvider {
                 }
             },
             {
+                name: "search_entities",
+                description: "Searches for existing entities in the graph by name. Use this to find the exact entity names needed for get_blast_radius.",
+                inputSchema: {
+                    type: "object",
+                    properties: {
+                        query: { type: "string", description: "Optional substring to search for. Leave empty to list all entities." }
+                    }
+                }
+            },
+            {
                 name: "expand_ontology",
                 description: "Adds a new allowed entityType or edgeType to the strict configuration.",
                 inputSchema: {
@@ -111,6 +121,16 @@ export class GraphToolProvider implements ToolProvider {
                 };
             }
             
+            if (name === "search_entities") {
+                const { query } = args;
+                const entities = this.database.getAllEntities();
+                const matches = query 
+                    ? entities.filter(e => e.name.toLowerCase().includes(query.toLowerCase()))
+                    : entities;
+                
+                return { content: [{ type: "text", text: JSON.stringify(matches, null, 2) }] };
+            }
+
             if (name === "expand_ontology") {
                 const { category, newType } = args;
                 if (category === "entity") {
