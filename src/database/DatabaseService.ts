@@ -119,6 +119,6 @@ export class DatabaseService {
     sql += ` ORDER BY distance LIMIT ?`;
     params.push(limit);
 
-    return this.db.prepare(sql).all(...params);
+    return this.db.prepare(sql).all(...params) as any[];
   }
 }

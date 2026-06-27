@@ -8,6 +8,8 @@ import { GraphService } from "./graph/GraphService.js";
 
 import { ToolProvider } from "./mcp/providers/ToolProvider.js";
 import { GraphToolProvider } from "./mcp/providers/GraphToolProvider.js";
+import { VectorToolProvider } from "./mcp/providers/VectorToolProvider.js";
+import { EmbeddingService } from "./vector/EmbeddingService.js";
 
 // ==========================================
 // 1. BOOT SEQUENCE: Initialize the Core Pillars
@@ -30,9 +32,11 @@ const server = new Server(
 );
 
 // The Registry of all Tool Providers. 
-// When you build the VectorEngine, just drop `new VectorToolProvider()` right here!
+// We drop the VectorToolProvider right here to seamlessly merge it into the MCP server!
+const embeddingService = new EmbeddingService();
 const providers: ToolProvider[] = [
-  new GraphToolProvider(graphService, database, configLoader)
+  new GraphToolProvider(graphService, database, configLoader),
+  new VectorToolProvider(database, embeddingService)
 ];
 
 // ==========================================
