@@ -21,7 +21,10 @@ export interface Node {
     incoming: Edge[];
 }
 
-
+/**
+ * Graph service handles managemnet of node knowledge bases
+ * Nodes and edges are defined at load time, but new types can be added at runtime
+ */
 export class GraphService {
 
 
