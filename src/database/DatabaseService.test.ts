@@ -45,4 +45,30 @@ describe('DatabaseService', () => {
     expect(edges[0].target).toBe('UserTable');
     expect(edges[0].edgeType).toBe('DEPENDS_ON');
   });
+
+  it('should successfully save and search vectors via sqlite-vec', () => {
+    // Generate mock 384-dimensional vectors
+    const mockVector1 = new Array(384).fill(0);
+    mockVector1[0] = 1.0; // Pointing strongly along X axis
+
+    const mockVector2 = new Array(384).fill(0);
+    mockVector2[0] = -1.0; // Pointing in exact opposite direction
+
+    // Save them to the database
+    dbService.saveVector('src/auth.ts', 'CODE', 0, 'auth logic', mockVector1);
+    dbService.saveVector('src/db.ts', 'CODE', 0, 'database connection', mockVector2);
+
+    // Search for a vector extremely close to mockVector1
+    const searchVector = new Array(384).fill(0);
+    searchVector[0] = 0.9;
+    
+    // We expect auth.ts to be returned because it's much closer in Euclidean distance (L2)
+    const results = dbService.searchVectors(searchVector, 1, 10.0, ['CODE']);
+    
+    expect(results.length).toBe(1);
+    expect(results[0].reference_id).toBe('src/auth.ts');
+    expect(results[0].content).toBe('auth logic');
+    expect(results[0].source_type).toBe('CODE');
+    expect(results[0].distance).toBeLessThan(0.5); // Very close distance
+  });
 });
