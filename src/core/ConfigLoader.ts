@@ -22,15 +22,15 @@ export class ConfigLoader {
         const parsed = JSON.parse(fileContent);
         
         // Strict Validation: Fail fast if the structure is broken
-        if (!Array.isArray(parsed.entityTypes) || parsed.nodeTypes.length === 0) {
+        if (!Array.isArray(parsed.entityTypes) || parsed.entityTypes.length === 0) {
           throw new Error("Invalid config: 'entityTypes' must be a non-empty array.");
         }
         if (!Array.isArray(parsed.edgeTypes) || parsed.edgeTypes.length === 0) {
-          throw new Error("Invalid config: 'entityTypes' must be a non-empty array.");
+          throw new Error("Invalid config: 'edgeTypes' must be a non-empty array.");
         }
         
         this.config = {
-          entityTypes: parsed.nodeTypes,
+          entityTypes: parsed.entityTypes,
           edgeTypes: parsed.edgeTypes,
         };
         console.log(`[Config] Loaded custom ontology from ${this.configPath}`);
@@ -41,7 +41,7 @@ export class ConfigLoader {
     } else {
       console.log(`[Config] No config found. Creating default ontology at ${this.configPath}`);
       // Auto-create the file so it's always ready to be updated
-      this._saveConfigToDisk();
+      this.saveToDisk();
     }
   }
 
@@ -50,12 +50,12 @@ export class ConfigLoader {
   }
 
   /**
-   * Adds a new node type to the ontology and permanently saves it to the config file.
+   * Adds a new entity type to the ontology and permanently saves it to the config file.
    */
   public addEntityType(type: string) {
     if (!this.config.entityTypes.includes(type)) {
       this.config.entityTypes.push(type);
-      this._saveConfigToDisk();
+      this.saveToDisk();
     }
   }
 
@@ -65,11 +65,15 @@ export class ConfigLoader {
   public addEdgeType(type: string) {
     if (!this.config.edgeTypes.includes(type)) {
       this.config.edgeTypes.push(type);
-      this._saveConfigToDisk();
+      this.saveToDisk();
     }
   }
 
-  private _saveConfigToDisk() {
+  /**
+   * Writes the current ontology to the config file. 
+   * Can be wired into process.on('exit') as a finally-block equivalent.
+   */
+  public saveToDisk() {
     // Ensure the .cortex directory exists
     const dir = path.dirname(this.configPath);
     if (!fs.existsSync(dir)) {
