@@ -1,41 +1,52 @@
-# Cortex: The AI Operating System
+# Cortex MCP
 
-Cortex is an advanced **Hybrid Memory and Diagnostic Engine** designed as a Model Context Protocol (MCP) server. It elevates standard coding AI agents from simple chat bots into autonomous, senior-level engineering partners by providing them with persistent memory and active diagnostic tools.
+Cortex is an advanced Model Context Protocol (MCP) server that supercharges your AI assistant with **Domain-Driven Design Topology** and **Vector Mathematics**.
 
-To prevent the "slopification" of AI memory, Cortex utilizes a strict, project-scoped ontology and a 4-tiered architecture.
+It is designed to solve the two biggest problems with AI coding assistants:
+1. They hallucinate architectural boundaries (e.g. telling your frontend to query your database directly).
+2. They get lost in large codebases due to context limits.
 
-## The 4 Pillars of Cortex
+Cortex acts as a localized brain for your repository, mapping your codebase into a strict Topological Graph, and cross-referencing it with a native SQLite Vector Database.
 
-### 1. The Graph Engine (The "What" and "Where")
-Models strict, deterministic relationships (e.g., SQL schemas, API request chains, Component trees). It allows the AI to traverse "Nodes" and "Edges" to understand the exact architecture and blast radius of any code change, preventing breakages.
+## Installation
 
-### 2. The Vector Store (The "Why")
-Stores unstructured concepts, design decisions, and large code snippets for semantic mathematical search. When the AI needs historical context on why a specific hack or architectural choice was made, it searches the vectors.
+Cortex is completely zero-config and runs locally in your project via NPM.
 
-### 3. Core Memory (The "How")
-Maintains global, absolute rules and directives (e.g., "Always use Tailwind", "Never use `any` in TypeScript"). This is injected into the AI's context unconditionally, ensuring it never forgets your coding standards.
-
-### 4. The Diagnostic Engine (Active Debugging)
-Cortex acts as both a bridge and a vault for runtime errors:
-*   **Live Log Bridge:** Provides tools for the AI to run `grep` searches against your live local server logs to diagnose active crashes autonomously.
-*   **Post-Mortem Vault:** Once the AI fixes a bug, it permanently saves the stack trace and the solution into the Knowledge Base so it never has to solve the exact same crash twice.
-
-## Architecture & Configuration
-- **Language:** TypeScript (ESM)
-- **Protocol:** Official Model Context Protocol (MCP)
-- **Storage:** SQLite (`better-sqlite3`) for robust disk persistence, loaded into `O(1)` memory Maps for lightning-fast traversal.
-- **Schema-Driven:** The entire graph is configurable. Users define their own allowed Entity Types and Relations in a project-scoped `.cortex/config.json` file. The MCP server dynamically enforces this ontology, completely preventing the AI from creating unstructured garbage.
-
-## Codebase Structure
-Cortex is built using a strict **Domain-Driven Design**. The Engines and Database are completely decoupled from the AI/MCP protocol.
-
-```text
-cortex/
-└── src/
-    ├── graph/             # Topology maps & relationship traversal
-    ├── vector/            # Inference (embeddings generation) & cosine similarity
-    ├── diagnostic/        # Log tailing, grep search, and post-mortems
-    ├── core/              # Loads .cortex/config.json & global rules
-    ├── db/                # The shared SQLite vault for all domains
-    └── mcp/               # AI Protocol Layer (Server & Tool Handlers)
+### Claude Desktop
+Add this to your `claude_desktop_config.json`:
+```json
+"cortex": {
+  "command": "npx",
+  "args": ["-y", "cortex-mcp"]
+}
 ```
+
+### Antigravity (AGY)
+```bash
+agy mcp install cortex npx -y cortex-mcp
+```
+
+## Features
+
+### 1. The Topological Graph
+Cortex enforces strict Domain-Driven Design rules. The AI can map entities (like `Service`, `DatabaseTable`, `Controller`) and link them with directed edges (`DEPENDS_ON`, `QUERIES`). The ontology is strictly enforced.
+
+### 2. The Local Vector Engine
+Cortex embeds a local instance of Transformers.js (`Xenova/all-MiniLM-L6-v2`) and the lightning-fast `sqlite-vec` extension. The AI can bulk-index your markdown documentation (`.md`, `.mdx`), allowing it to semantically search your knowledge base via natural language without wasting context windows.
+
+### 3. The Cross-Reference Link
+The two engines talk to each other. When the AI performs a semantic search, Cortex cross-references the Vector Engine with the Topological Graph to instantly tell the AI which architectural component owns the documentation.
+
+## The CLI Wrapper
+Cortex isn't just for AI. Human engineers can use the built-in CLI:
+
+- `npx cortex-mcp visualize`: Generates a beautiful, interactive 3D force-directed HTML graph of your software architecture.
+- `npx cortex-mcp query "auth logic"`: Performs a lightning-fast natural language semantic search across your codebase directly from your terminal.
+- `npx cortex-mcp init`: Bootstraps the `.cortex/` configuration directory.
+
+## Getting Started
+Just open a chat with your AI and say:
+> *"Cortex, please use index_directory to ingest my markdown documentation, and then map my database tables into the graph."*
+
+## License
+MIT
