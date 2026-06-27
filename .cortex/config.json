@@ -1,0 +1,16 @@
+{
+  "entityTypes": [
+    "Component",
+    "DatabaseTable",
+    "Service",
+    "Route",
+    "BusinessRule"
+  ],
+  "edgeTypes": [
+    "DEPENDS_ON",
+    "CALLS_API",
+    "WRITES_TO",
+    "READS_FROM",
+    "IMPLEMENTS"
+  ]
+}

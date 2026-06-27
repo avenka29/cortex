@@ -1,5 +1,6 @@
 import Database from 'better-sqlite3';
 import path from 'path';
+import fs from 'node:fs';
 import { Entity, Edge } from '../graph/GraphService.js';
 
 export class DatabaseService {
@@ -17,8 +18,6 @@ export class DatabaseService {
    */
   private initializeSchema() {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const fs = require('node:fs');
       const schemasDir = path.resolve(process.cwd(), 'src', 'database', 'schemas');
       
       const files = fs.readdirSync(schemasDir);
