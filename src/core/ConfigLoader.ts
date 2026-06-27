@@ -33,13 +33,13 @@ export class ConfigLoader {
           entityTypes: parsed.entityTypes,
           edgeTypes: parsed.edgeTypes,
         };
-        console.log(`[Config] Loaded custom ontology from ${this.configPath}`);
+        console.error(`[Config] Loaded custom ontology from ${this.configPath}`);
       } catch (err) {
         console.error(`[Config] FATAL ERROR: Invalid configuration at ${this.configPath}`);
         throw err; // Fail-fast on startup
       }
     } else {
-      console.log(`[Config] No config found. Creating default ontology at ${this.configPath}`);
+      console.error(`[Config] No config found. Creating default ontology at ${this.configPath}`);
       // Auto-create the file so it's always ready to be updated
       this.saveToDisk();
     }
@@ -82,6 +82,6 @@ export class ConfigLoader {
 
     // Write back with beautiful 2-space formatting
     fs.writeFileSync(this.configPath, JSON.stringify(this.config, null, 2), 'utf-8');
-    console.log(`[Config] Wrote updated ontology to ${this.configPath}`);
+    console.error(`[Config] Wrote updated ontology to ${this.configPath}`);
   }
 }

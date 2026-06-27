@@ -1,7 +1,11 @@
 import Database from 'better-sqlite3';
 import path from 'path';
 import fs from 'node:fs';
+import { fileURLToPath } from 'url';
 import { Entity, Edge } from '../graph/GraphService.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export class DatabaseService {
   private db: Database.Database;
@@ -18,7 +22,8 @@ export class DatabaseService {
    */
   private initializeSchema() {
     try {
-      const schemasDir = path.resolve(process.cwd(), 'src', 'database', 'schemas');
+      // Resolve relative to THIS file's location, NOT the terminal's execution directory
+      const schemasDir = path.resolve(__dirname, '../../src/database/schemas');
       
       const files = fs.readdirSync(schemasDir);
       for (const file of files) {
@@ -28,7 +33,7 @@ export class DatabaseService {
         }
       }
       
-      console.log(`[DatabaseService] Successfully loaded ${files.length} schema files into ${this.db.name}`);
+      console.error(`[DatabaseService] Successfully loaded ${files.length} schema files into ${this.db.name}`);
     } catch (err) {
       console.error(`[DatabaseService] FATAL ERROR: Failed to load schemas`, err);
       throw err;

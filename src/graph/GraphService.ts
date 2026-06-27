@@ -80,7 +80,7 @@ export class GraphService {
             }
         }
 
-        console.log(`[GraphService] Successfully built memory map with ${this.graph.size} active nodes.`);
+        console.error(`[GraphService] Successfully built memory map with ${this.graph.size} active nodes.`);
     }
 
     /**

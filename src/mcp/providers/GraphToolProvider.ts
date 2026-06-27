@@ -15,13 +15,18 @@ export class GraphToolProvider implements ToolProvider {
         return [
             {
                 name: "add_entity",
-                description: `Creates or updates an entity in the graph. Allowed types: [${config.entityTypes.join(', ')}]`,
+                description: `Creates or updates an entity in the graph. Allowed types: [${config.entityTypes.join(', ')}].\nCRITICAL: You are highly encouraged to physically read the raw source code files using your file reading tools before adding an entity here, especially for code-related artifacts. Hallucinating entities that do not exist is bad practice. Provide the associated filePaths when applicable.`,
                 inputSchema: {
                     type: "object",
                     properties: {
                         name: { type: "string" },
                         entityType: { type: "string" },
-                        content: { type: "string" }
+                        content: { type: "string" },
+                        filePaths: { 
+                            type: "array", 
+                            items: { type: "string" },
+                            description: "Paths to the physical files this entity represents."
+                        }
                     },
                     required: ["name", "entityType"]
                 }
@@ -68,8 +73,14 @@ export class GraphToolProvider implements ToolProvider {
     public async handleCall(name: string, args: any): Promise<any | null> {
         try {
             if (name === "add_entity") {
-                const { name: entityName, entityType, content } = args;
-                this.graphService.addEntity({ name: entityName, entityType }, content || "");
+                const { name: entityName, entityType, content, filePaths } = args;
+                
+                let finalContent = content || "";
+                if (filePaths && Array.isArray(filePaths) && filePaths.length > 0) {
+                    finalContent += `\n\n### Associated Files\n` + filePaths.map((f: string) => `- ${f}`).join('\n');
+                }
+                
+                this.graphService.addEntity({ name: entityName, entityType }, finalContent);
                 return { content: [{ type: "text", text: `Successfully added entity: ${entityName}` }] };
             } 
             
