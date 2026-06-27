@@ -17,13 +17,13 @@ Add this to your `claude_desktop_config.json`:
 ```json
 "cortex": {
   "command": "npx",
-  "args": ["-y", "cortex-mcp"]
+  "args": ["-y", "cortex-kb"]
 }
 ```
 
 ### Antigravity (AGY)
 ```bash
-agy mcp install cortex npx -y cortex-mcp
+agy mcp install cortex npx -y cortex-kb
 ```
 
 ## Features
@@ -40,9 +40,9 @@ The two engines talk to each other. When the AI performs a semantic search, Cort
 ## The CLI Wrapper
 Cortex isn't just for AI. Human engineers can use the built-in CLI:
 
-- `npx cortex-mcp visualize`: Generates a beautiful, interactive 3D force-directed HTML graph of your software architecture.
-- `npx cortex-mcp query "auth logic"`: Performs a lightning-fast natural language semantic search across your codebase directly from your terminal.
-- `npx cortex-mcp init`: Bootstraps the `.cortex/` configuration directory.
+- `npx cortex-kb visualize`: Generates a beautiful, interactive 3D force-directed HTML graph of your software architecture.
+- `npx cortex-kb query "auth logic"`: Performs a lightning-fast natural language semantic search across your codebase directly from your terminal.
+- `npx cortex-kb init`: Bootstraps the `.cortex/` configuration directory.
 
 ## Getting Started
 Just open a chat with your AI and say:
