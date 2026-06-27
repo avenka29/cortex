@@ -1,6 +1,6 @@
 import Database from 'better-sqlite3';
 import path from 'path';
-import { GraphNode, GraphEdge } from '../graph/service.js';
+import { Entity, Edge } from '../graph/GraphService.js';
 
 export class DatabaseService {
   private db: Database.Database;
@@ -13,49 +13,43 @@ export class DatabaseService {
   }
 
   /**
-   * Creates the required tables for all 4 Cortex Pillars
+   * Automatically executes all .sql files inside the schemas/ directory
    */
   private initializeSchema() {
-    this.db.exec(`
-      -- 1. GRAPH ENGINE TABLES
-      CREATE TABLE IF NOT EXISTS nodes (
-        name TEXT PRIMARY KEY,
-        nodeType TEXT,
-        content TEXT -- The rich markdown context for the AI
-      );
-
-      CREATE TABLE IF NOT EXISTS edges (
-        source TEXT,
-        target TEXT,
-        edgeType TEXT,
-        PRIMARY KEY (source, target, edgeType),
-        FOREIGN KEY(source) REFERENCES nodes(name),
-        FOREIGN KEY(target) REFERENCES nodes(name)
-      );
-
-      -- 2. VECTOR ENGINE TABLES (Stub for later)
-      -- CREATE TABLE IF NOT EXISTS vectors ( node_name TEXT, embedding BLOB ... )
-
-      -- 3. DIAGNOSTIC ENGINE TABLES (Stub for later)
-      -- CREATE TABLE IF NOT EXISTS post_mortems ( error_hash TEXT, solution TEXT ... )
-    `);
-    console.log(`[DatabaseService] SQLite schema initialized at ${this.db.name}`);
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const fs = require('node:fs');
+      const schemasDir = path.resolve(process.cwd(), 'src', 'database', 'schemas');
+      
+      const files = fs.readdirSync(schemasDir);
+      for (const file of files) {
+        if (file.endsWith('.sql')) {
+          const sql = fs.readFileSync(path.join(schemasDir, file), 'utf-8');
+          this.db.exec(sql);
+        }
+      }
+      
+      console.log(`[DatabaseService] Successfully loaded ${files.length} schema files into ${this.db.name}`);
+    } catch (err) {
+      console.error(`[DatabaseService] FATAL ERROR: Failed to load schemas`, err);
+      throw err;
+    }
   }
 
   // ==========================================
   // GRAPH ENGINE: Read Operations
   // ==========================================
 
-  public getAllNodes(): GraphNode[] {
+  public getAllEntities(): Entity[] {
     // LAZY LOAD: We intentionally exclude 'content' to keep the startup memory footprint tiny
-    return this.db.prepare("SELECT name, nodeType FROM nodes").all() as GraphNode[];
+    return this.db.prepare("SELECT name, entityType FROM nodes").all() as Entity[];
   }
 
-  public getAllEdges(): GraphEdge[] {
-    return this.db.prepare("SELECT source, target, edgeType FROM edges").all() as GraphEdge[];
+  public getAllEdges(): Edge[] {
+    return this.db.prepare("SELECT source, target, edgeType FROM edges").all() as Edge[];
   }
 
-  public getNodeContent(name: string): string | null {
+  public getEntityContent(name: string): string | null {
     // Fetches the heavy Markdown payload only when explicitly requested by the AI
     const row = this.db.prepare("SELECT content FROM nodes WHERE name = ?").get(name) as { content: string } | undefined;
     return row ? row.content : null;
@@ -65,12 +59,12 @@ export class DatabaseService {
   // GRAPH ENGINE: Write Operations
   // ==========================================
 
-  public upsertNode(node: GraphNode, content: string = "") {
-    const stmt = this.db.prepare("INSERT OR REPLACE INTO nodes (name, nodeType, content) VALUES (?, ?, ?)");
-    stmt.run(node.name, node.nodeType, content);
+  public upsertEntity(entity: Entity, content: string = "") {
+    const stmt = this.db.prepare("INSERT OR REPLACE INTO nodes (name, entityType, content) VALUES (?, ?, ?)");
+    stmt.run(entity.name, entity.entityType, content);
   }
 
-  public addEdge(edge: GraphEdge) {
+  public addEdge(edge: Edge) {
     const stmt = this.db.prepare("INSERT OR IGNORE INTO edges (source, target, edgeType) VALUES (?, ?, ?)");
     stmt.run(edge.source, edge.target, edge.edgeType);
   }
