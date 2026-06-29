@@ -8,6 +8,17 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'Cortex MCP Server',
+			defaultTheme: 'dark',
+			expressiveCode: {
+				themes: ['github-dark'],
+			},
+			customCss: [
+				'./src/styles/custom.css',
+			],
+			components: {
+				Hero: './src/components/Hero.astro',
+				Header: './src/components/Header.astro'
+			},
 			social: [
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/avenka29/cortex' }
 			],

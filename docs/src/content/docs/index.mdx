@@ -1,41 +1,19 @@
 ---
 title: Welcome to Cortex
 description: The ultimate Domain-Driven Design Knowledge Base for AI coding assistants.
-template: doc
+template: splash
+hero:
+  tagline: Supercharge your AI assistant with a strict Domain-Driven Topological Graph and a lightning-fast SQLite Vector Database.
+  image:
+    file: ../../assets/houston.webp
+  actions:
+    - text: Core Installation
+      link: /cortex/getting-started/
+      icon: right-arrow
+      variant: primary
+    - text: GitHub Repository
+      link: https://github.com/avenka29/cortex
+      icon: external
+      variant: minimal
 ---
 
-import CustomHero from '../../components/CustomHero.astro';
-import { Card, CardGrid, Steps } from '@astrojs/starlight/components';
-
-<CustomHero />
-
----
-
-## How it Works
-
-<Steps>
-
-1. **You ask a question:** The AI receives your complex architectural request.
-2. **Cortex Vectors it:** The AI searches your local markdown files instantly using `sqlite-vec`.
-3. **Cortex Graphs it:** The AI cross-references the result against your Domain-Driven topological graph to find dependencies.
-
-</Steps>
-
----
-
-## Core Features
-
-<CardGrid stagger>
-	<Card title="Enforce Boundaries" icon="setting">
-		Cortex maps your codebase into a strict Topological Graph to ensure the AI never hallucinates invalid imports or bypasses your architecture layers.
-	</Card>
-	<Card title="Vector Search" icon="magnifier">
-		Local `Transformers.js` and `sqlite-vec` bulk-index your Markdown docs for instant semantic retrieval, completely bypassing context window limits.
-	</Card>
-	<Card title="Zero-Config MCP" icon="puzzle">
-		Run it instantly via `npx`. Cortex plugs straight into Claude, Cursor, and Antigravity as an MCP server with zero external database setup.
-	</Card>
-	<Card title="3D Visualization" icon="document">
-		Run the `visualize` CLI command to explore your architecture in a beautiful, physics-based 3D force-directed HTML graph right in your browser.
-	</Card>
-</CardGrid>

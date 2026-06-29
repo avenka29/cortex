@@ -5,7 +5,7 @@ description: How to install and run Cortex as an MCP server.
 
 Cortex is completely zero-config and runs locally in your project via NPM. It exposes a dual-engine brain (Vector Search + Topological Graph) to your AI coding assistants.
 
-## 1. Quick Start (Claude)
+## Quick Start (Claude)
 
 To install Cortex inside Claude, simply run this command in your terminal:
 
@@ -13,7 +13,7 @@ To install Cortex inside Claude, simply run this command in your terminal:
 claude mcp add cortex -- npx -y cortex-kb
 ```
 
-## 2. Antigravity (AGY)
+## Antigravity (AGY)
 
 To install the Cortex MCP server in your Antigravity environment, run:
 
@@ -21,9 +21,9 @@ To install the Cortex MCP server in your Antigravity environment, run:
 agy mcp install cortex npx -y cortex-kb
 ```
 
-## 3. Human CLI Usage
+## Human CLI Usage
 
-Cortex also includes a CLI wrapper that human engineers can use directly in the terminal!
+Cortex also includes a CLI wrapper that human engineers can use directly in the terminal:
 
 ```bash
 # Initialize the .cortex/ database config
@@ -38,18 +38,30 @@ npx cortex-kb visualize
 
 ---
 
-## Example Prompts
+## Example Scenarios
 
-Once Cortex is connected to your AI, try pasting these prompts into your chat to see the magic happen:
+Once Cortex is connected to your AI, try pasting these prompts into your chat to see the system in action:
 
-### 🧠 Bootstrapping the Brain
-> *"Cortex, please use `index_directory` to ingest all the markdown documentation in my `/docs` folder, and then analyze my `src/` folder to map my core services into the topological graph."*
+### Bootstrapping the Brain
 
-### 🕵️‍♀️ Architectural Investigation
-> *"Before we write any code, use Cortex to find the `PaymentController` in the graph. I need to know exactly which services it `DEPENDS_ON` so we don't violate our Domain-Driven Design rules."*
+```text
+> Cortex, please ingest all the markdown documentation in my `/docs` folder, and then analyze my `src/` folder to map my core services into the topological graph.
+```
 
-### 💥 Blast Radius Analysis
-> *"I need to refactor the `DatabaseService`. Can you use `get_blast_radius` to list every single component that will break if I change the methods in this service?"*
+### Architectural Investigation
 
-### 🔍 Semantic Lookup
-> *"I forgot how we configure the caching layer. Can you perform a `semantic_search` for 'Redis caching configuration' to find the exact documentation for it?"*
+```text
+> Before we write any code, use Cortex to find the `PaymentController` in the graph. I need to know exactly which services it depends on so we don't violate our Domain-Driven Design rules.
+```
+
+### Blast Radius Analysis
+
+```text
+> I need to refactor the `DatabaseService`. Can you use Cortex to determine the blast radius and list every single component that will break if I change the methods in this service?
+```
+
+### Semantic Lookup
+
+```text
+> I forgot how we configure the caching layer. Can you use Cortex to search our documentation for 'Redis caching configuration' and find the exact setup steps?
+```

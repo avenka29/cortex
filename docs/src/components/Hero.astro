@@ -1,0 +1,146 @@
+---
+---
+<div class="custom-hero">
+  <div class="hero-content">
+    <div class="badge animate-fade-in">v0.1.4 / stable</div>
+    <h1 class="title animate-fade-in animate-delay-1">Cortex MCP.</h1>
+    <p class="subtitle animate-fade-in animate-delay-2">The strictly typed, dual-engine knowledge base for AI coding assistants. Built for Claude and Cursor.</p>
+    
+    <div class="actions animate-fade-in animate-delay-3">
+      <a href="/cortex/getting-started/" class="btn-primary">Initialize Cortex</a>
+      <a href="https://github.com/avenka29/cortex" class="btn-secondary">Source Code</a>
+    </div>
+
+    <div class="terminal animate-fade-in animate-delay-3">
+      <div class="terminal-header">
+        <span>terminal</span>
+      </div>
+      <div class="terminal-body">
+        <div class="line"><span class="prompt">$</span> claude mcp add cortex -- npx -y cortex-kb</div>
+        <div class="line success">MCP Server 'cortex' installed.</div>
+        <div class="line success">Initializing SQLite Vector Database... [OK]</div>
+        <div class="line success">Ready for Claude queries.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .custom-hero {
+    display: flex;
+    justify-content: center; /* Centered layout */
+    padding: 8rem 2rem;
+    font-family: var(--sl-font);
+    text-align: center;
+  }
+  .hero-content {
+    max-width: 800px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .badge {
+    font-family: var(--sl-font-mono);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border: 1px solid #333;
+    border-radius: 9999px; /* Pill */
+    color: #888;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .title {
+    font-size: clamp(3.5rem, 8vw, 6rem);
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 1.5rem 0;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  .subtitle {
+    font-size: 1.25rem;
+    color: #888;
+    max-width: 600px;
+    margin: 0 0 3rem 0;
+    line-height: 1.6;
+  }
+  .actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 4rem;
+  }
+  .btn-primary {
+    background: #fff;
+    color: #000;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn-primary:hover {
+    background: #e5e5e5;
+    transform: translateY(-2px);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: #fff;
+    border: 1px solid #333;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-secondary:hover {
+    border-color: #fff;
+    color: #fff;
+  }
+  /* Black terminal */
+  .terminal {
+    width: 100%;
+    max-width: 700px;
+    border-radius: 8px;
+    background: #000000;
+    border: 1px solid #333333;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    text-align: left;
+  }
+  .terminal-header {
+    background: #111111;
+    border-bottom: 1px solid #333333;
+    padding: 0.75rem 1rem;
+    font-family: var(--sl-font-mono);
+    font-size: 0.75rem;
+    color: #888888;
+    display: flex;
+    align-items: center;
+  }
+  .terminal-header::before {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ef4444;
+    box-shadow: 18px 0 0 #f59e0b, 36px 0 0 #10b981;
+    margin-right: 3rem;
+  }
+  .terminal-body {
+    padding: 2rem;
+    font-family: var(--sl-font-mono);
+    font-size: 0.875rem;
+    color: #ffffff;
+    line-height: 1.6;
+  }
+  .prompt {
+    color: #666666;
+    margin-right: 0.5rem;
+  }
+  .success {
+    color: #aaaaaa;
+  }
+</style>
