@@ -1,0 +1,36 @@
+---
+title: Welcome to Cortex
+description: The ultimate Domain-Driven Design Knowledge Base for AI coding assistants.
+template: splash
+hero:
+  tagline: Supercharge your AI assistant with a strict Domain-Driven Topological Graph and a lightning-fast SQLite Vector Database.
+  image:
+    file: ../../assets/houston.webp
+  actions:
+    - text: Get Started
+      link: /cortex/getting-started/
+      icon: right-arrow
+      variant: primary
+    - text: View on GitHub
+      link: https://github.com/avenka29/cortex
+      icon: external
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Next steps
+
+<CardGrid stagger>
+	<Card title="Enforce Boundaries" icon="setting">
+		Cortex maps your codebase into a strict Topological Graph to ensure the AI never hallucinates invalid imports.
+	</Card>
+	<Card title="Vector Search" icon="magnifier">
+		Local Transformers.js and sqlite-vec bulk-index your Markdown docs for instant semantic retrieval.
+	</Card>
+	<Card title="Zero-Config MCP" icon="puzzle">
+		Run it instantly via npx. Cortex plugs straight into Claude Desktop and Antigravity (AGY) as an MCP server.
+	</Card>
+	<Card title="3D Visualization" icon="document">
+		Run the `visualize` CLI command to explore your architecture in a beautiful, physics-based 3D force-directed HTML graph.
+	</Card>
+</CardGrid>
