@@ -1,8 +1,11 @@
 {
   "name": "cortex-kb",
-  "version": "0.1.3",
+  "version": "0.1.1",
   "type": "module",
   "main": "dist/cli.js",
+  "files": [
+    "dist"
+  ],
   "bin": {
     "cortex": "./dist/cli.js"
   },
