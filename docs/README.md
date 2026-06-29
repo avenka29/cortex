@@ -10,7 +10,9 @@ npm create astro@latest -- --template starlight
 
 ## 🚀 Project Structure
 
-Inside of your Astro + Starlight project, you'll see the following folders and files:
+# Cortex Knowledge Base Documentation
+
+Welcome to the Starlight documentation for Cortex. project, you'll see the following folders and files:
 
 ```
 .
