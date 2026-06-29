@@ -5,9 +5,9 @@ description: How to install and run Cortex as an MCP server.
 
 Cortex is completely zero-config and runs locally in your project via NPM. It exposes a dual-engine brain (Vector Search + Topological Graph) to your AI coding assistants.
 
-## 1. Quick Start (Claude Desktop)
+## 1. Quick Start (Claude)
 
-To install Cortex inside Claude Desktop, simply run this command in your terminal:
+To install Cortex inside Claude, simply run this command in your terminal:
 
 ```bash
 claude mcp add cortex -- npx -y cortex-kb
