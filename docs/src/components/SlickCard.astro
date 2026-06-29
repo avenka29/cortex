@@ -1,0 +1,46 @@
+---
+const { title, gradient = "linear-gradient(to right, #f4f4f5, #a1a1aa)" } = Astro.props;
+---
+<div class="slick-card">
+  <h3 class="slick-title" style={`background-image: ${gradient};`}>
+    {title}
+  </h3>
+  <div class="slick-content">
+    <slot /> 
+  </div>
+</div>
+
+<style>
+  .slick-card {
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid #27272a;
+    background-color: rgba(9, 9, 11, 0.5);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+  }
+  .slick-card:hover {
+    border-color: #52525b;
+    transform: translateY(-4px);
+  }
+  .slick-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-top: 0 !important;
+    margin-bottom: 0.75rem !important;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .slick-content {
+    color: #a1a1aa;
+    font-size: 0.875rem;
+    line-height: 1.625;
+  }
+  .slick-content :global(ul) {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+</style>

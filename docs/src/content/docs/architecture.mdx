@@ -3,6 +3,8 @@ title: Architecture
 description: Understanding the Cortex dual-engine brain.
 ---
 
+import SlickCard from '../../components/SlickCard.astro';
+
 Cortex is built on a "Dual-Engine" architecture that enforces **Domain-Driven Design (DDD)** while providing massive context via **Vector Search**.
 
 ## The Problem
@@ -12,17 +14,50 @@ Modern AI coding assistants suffer from two major flaws:
 
 ## The Cortex Solution
 
-### 1. The Topological Graph Engine
+<script type="module">{`
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ 
+    startOnLoad: true, 
+    theme: 'dark',
+    themeVariables: {
+      background: 'transparent',
+      primaryColor: '#09090b',
+      primaryBorderColor: '#52525b',
+      lineColor: '#71717a',
+      fontFamily: 'Inter, sans-serif'
+    }
+  });
+`}</script>
+
+<pre className="mermaid flex justify-center my-8 bg-transparent border-none">{`
+flowchart TD
+    AI[AI Coding Assistant] -->|MCP Protocol| Cortex{Cortex Server}
+    
+    Cortex -->|Architecture Rules| Graph[Topological Graph]
+    Cortex -->|Context Lookups| Vector[Vector Engine]
+    
+    Graph -->|Nodes & Edges| DB1[(SQLite DB)]
+    Vector -->|Markdown Embeddings| DB2[(sqlite-vec)]
+    
+    Graph --- Vector
+`}</pre>
+
+<br />
+
+<SlickCard title="1. The Topological Graph Engine">
 The graph engine acts as the strict enforcer of Domain-Driven Design. It maps:
 - **Nodes**: Entities in your codebase (e.g. `Controller`, `Service`, `Repository`).
 - **Edges**: Directed relationships (e.g. `DEPENDS_ON`, `QUERIES`).
 
 By strictly defining the ontology, the AI can query the graph and instantly know *what is allowed to talk to what*.
+</SlickCard>
 
-### 2. The Local Vector Engine
+<SlickCard title="2. The Local Vector Engine">
 Cortex embeds a local version of `Transformers.js` (using `Xenova/all-MiniLM-L6-v2`) and leverages the lightning-fast `sqlite-vec` extension for SQLite.
 
 Instead of embedding raw code, Cortex bulk-indexes your **Markdown Documentation**. When the AI needs context, it performs a natural language semantic search against your `.md` files without ever leaving your machine.
+</SlickCard>
 
-### 3. Cross-Engine Referencing
+<SlickCard title="3. Cross-Engine Referencing">
 The real power of Cortex is when the two engines communicate. When the AI reads documentation from the Vector Database, Cortex cross-references the file path with the Topological Graph to instantly identify which architectural component owns that documentation!
+</SlickCard>

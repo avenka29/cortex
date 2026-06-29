@@ -1,21 +1,55 @@
 :root {
   --sl-color-bg: #000000;
-  --sl-color-bg-nav: #000000;
-  --sl-color-bg-sidebar: #050505;
-  --sl-color-text: #eaeaea;
+  --sl-color-bg-nav: rgba(0, 0, 0, 0.8);
+  --sl-color-bg-sidebar: rgba(0, 0, 0, 0.8);
+  --sl-color-text: #a1a1aa;
   --sl-color-text-accent: #ffffff;
   --sl-color-border: #222222;
-  --sl-color-gray-1: #111111;
-  --sl-color-gray-2: #222222;
-  --sl-color-gray-3: #444444;
-  --sl-color-gray-4: #666666;
-  --sl-color-gray-5: #888888;
-  --sl-color-gray-6: #aaaaaa;
+  
+  /* Monochrome premium accents instead of Starlight default blue/purple */
+  --sl-color-accent: #ffffff;
+  --sl-color-accent-high: #ffffff;
+  --sl-color-accent-low: #222222;
+  --sl-font: 'Inter', system-ui, sans-serif;
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--sl-font);
   -webkit-font-smoothing: antialiased;
+  background-color: #000000;
+}
+
+/* Premium Typography for Markdown Content */
+.sl-markdown-content h1, 
+.sl-markdown-content h2, 
+.sl-markdown-content h3, 
+.sl-markdown-content h4 {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* Safe link styling */
+.sl-markdown-content p a, .sl-markdown-content li a {
+  color: #a1a1aa;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: #444;
+  transition: color 0.2s;
+}
+
+.sl-markdown-content p a:hover, .sl-markdown-content li a:hover {
+  color: #ffffff;
+  text-decoration-color: #ffffff;
+}
+
+.sl-markdown-content code:not(.expressive-code *) {
+  background: #111111 !important;
+  border: 1px solid #333333 !important;
+  color: #eaeaea !important;
+  padding: 0.2rem 0.4rem !important;
+  border-radius: 6px !important;
+  font-size: 0.85em !important;
 }
 
 /* Animations */
@@ -102,3 +136,14 @@ body {
   line-height: 1.6 !important;
   color: #ffffff !important;
 }
+
+/* Completely disable the default Starlight search bar hover effect */
+site-search button:hover {
+  background-color: transparent !important;
+  border-color: var(--sl-color-gray-5) !important;
+  color: var(--sl-color-gray-3) !important;
+  box-shadow: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+
