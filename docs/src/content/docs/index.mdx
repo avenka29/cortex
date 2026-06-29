@@ -1,0 +1,36 @@
+---
+title: Welcome to Cortex MCP
+description: The ultimate Domain-Driven Design and Vector Search Engine for your AI Assistant.
+template: splash
+hero:
+  tagline: Supercharge your AI Coding Assistant with a deterministic Topological Graph and a natively embedded Vector Database. No more context limits. No more architectural hallucinations.
+  image:
+    file: ../../assets/houston.webp
+  actions:
+    - text: Get Started
+      link: /cortex/getting-started/
+      icon: right-arrow
+      variant: primary
+    - text: Read the Architecture
+      link: /cortex/architecture/
+      icon: external
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## The Core Engines
+
+<CardGrid stagger>
+	<Card title="Topological Graph Engine" icon="pencil">
+		Enforce strict architectural boundaries using a local SQLite graph. The AI map components as Nodes and dependencies as Edges, ensuring it never hallucinates invalid imports.
+	</Card>
+	<Card title="Embedded Vector Math" icon="add-document">
+		Cortex embeds Xenova Transformers (`all-MiniLM-L6-v2`) and `sqlite-vec` directly in Node. Bulk index your markdown documentation without external APIs or rate limits.
+	</Card>
+	<Card title="Cross-Engine Referencing" icon="setting">
+		When the AI searches for semantic concepts in your docs, the Vector Engine cross-references the Topological Graph to instantly return the exact Architectural Entities associated with the text.
+	</Card>
+	<Card title="Beautiful CLI Visualizer" icon="open-book">
+		Run `cortex visualize` from your terminal to instantly generate an interactive, physics-based 3D topological map of your software architecture as a standalone HTML file.
+	</Card>
+</CardGrid>
