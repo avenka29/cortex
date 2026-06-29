@@ -1,5 +1,5 @@
 import { defineConfig } from 'astro/config';
-import starlight from '@withastro/starlight';
+import starlight from '@astrojs/starlight';
 
 export default defineConfig({
   // Format: 'https://<YOUR_GITHUB_USERNAME>.github.io/<YOUR_REPO_NAME>'
