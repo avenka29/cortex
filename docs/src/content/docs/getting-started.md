@@ -7,17 +7,10 @@ Cortex is completely zero-config and runs locally in your project via NPM. It ex
 
 ## 1. Quick Start (Claude Desktop)
 
-To use Cortex inside Claude Desktop, simply add this configuration to your `claude_desktop_config.json` file:
+To install Cortex inside Claude Desktop, simply run this command in your terminal:
 
-```json
-{
-  "mcpServers": {
-    "cortex": {
-      "command": "npx",
-      "args": ["-y", "cortex-kb"]
-    }
-  }
-}
+```bash
+claude mcp add cortex -- npx -y cortex-kb
 ```
 
 ## 2. Antigravity (AGY)
