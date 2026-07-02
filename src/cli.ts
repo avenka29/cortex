@@ -31,12 +31,25 @@ export async function runCLI() {
     const args = process.argv.slice(2);
     const command = args[0] || 'start'; // default to MCP server for backwards compatibility
 
-    const configLoader = new ConfigLoader();
-    configLoader.loadConfig();
+    if (command === '--help' || command === '-h' || command === 'help') {
+        console.log(`
+Cortex MCP Knowledge Base CLI
 
-    const database = new DatabaseService();
-    const graphService = new GraphService(database, configLoader);
-    graphService.loadGraph();
+Usage: cortex <command> [options]
+
+Commands:
+  start                     Starts the MCP server (Default)
+  init [provider|file]      Initializes the knowledge graph and injects AI instructions
+                            (e.g., 'cortex init cursor', 'cortex init rules.md')
+  index                     Indexes markdown documentation in the current directory
+  query <term>              Performs a semantic search against the knowledge base
+  visualize                 Generates an HTML visualization of the graph topology
+
+Options:
+  -h, --help                Show this help message
+        `);
+        process.exit(0);
+    }
 
     if (command === 'init') {
         const subCommand = args[1];
@@ -86,10 +99,18 @@ export async function runCLI() {
             }
         }
 
-        console.log("[Cortex] Initialized .cortex/config.json and knowledge_graph.db successfully.");
+        console.log("[Cortex] Initialized successfully.");
         process.exit(0);
     } 
-    else if (command === 'query') {
+
+    const configLoader = new ConfigLoader();
+    configLoader.loadConfig();
+
+    const database = new DatabaseService();
+    const graphService = new GraphService(database, configLoader);
+    graphService.loadGraph();
+
+    if (command === 'query') {
         const query = args.slice(1).join(" ");
         if (!query) {
             console.error("Please provide a search term. Usage: cortex query <term>");
@@ -228,29 +249,9 @@ export async function runCLI() {
         console.error("[Cortex] MCP Server successfully running on stdio transport.");
     }
     else {
-        if (command === '--help' || command === '-h' || command === 'help') {
-            console.log(`
-Cortex MCP Knowledge Base CLI
-
-Usage: cortex <command> [options]
-
-Commands:
-  start                     Starts the MCP server (Default command)
-  init [provider|file]      Initializes the knowledge graph and injects AI instructions
-                            (e.g., 'cortex init cursor', 'cortex init my-rules.md')
-  index                     Indexes markdown documentation in the current directory
-  query <term>              Performs a semantic search against the knowledge base
-  visualize                 Generates an HTML visualization of the graph topology
-
-Options:
-  -h, --help                Show this help message
-            `);
-            process.exit(0);
-        } else {
-            console.error(`\n[Cortex] ❌ Unknown command: '${command}'`);
-            console.error(`Run 'cortex --help' to see a list of available commands.\n`);
-            process.exit(1);
-        }
+        console.error(`\n[Cortex] ❌ Unknown command: '${command}'`);
+        console.error(`Run 'cortex --help' to see a list of available commands.\n`);
+        process.exit(1);
     }
 }
 
