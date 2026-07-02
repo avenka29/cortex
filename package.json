@@ -1,6 +1,6 @@
 {
   "name": "cortex-kb",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "main": "dist/cli.js",
   "files": [
@@ -17,9 +17,13 @@
     "test": "vitest run"
   },
   "keywords": [],
-  "author": "",
+  "author": "avenka29",
   "license": "ISC",
-  "description": "",
+  "description": "Cortex MCP Knowledge Base CLI",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avenka29/cortex.git"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@xenova/transformers": "^2.17.2",
