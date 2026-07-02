@@ -71,4 +71,12 @@ describe('DatabaseService', () => {
     expect(results[0].source_type).toBe('CODE');
     expect(results[0].distance).toBeLessThan(0.5); // Very close distance
   });
+
+  it('should execute custom SELECT queries successfully', () => {
+    dbService.upsertEntity({ name: 'Node1', entityType: 'Service' }, 'content1');
+    const results = dbService.executeCustomQuery("SELECT * FROM nodes WHERE name = 'Node1'");
+    expect(results.length).toBe(1);
+    expect(results[0].name).toBe('Node1');
+    expect(results[0].content).toBe('content1');
+  });
 });

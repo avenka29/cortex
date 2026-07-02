@@ -81,4 +81,24 @@ describe('GraphToolProvider', () => {
         expect(result?.isError).toBe(true);
         expect(result?.content[0].text).toContain('FakeType is not in the allowed ontology.');
     });
+
+    it('should successfully execute run_custom_query', async () => {
+        mockDb.executeCustomQuery.mockReturnValue([{ name: 'TestNode' }]);
+        
+        const result = await provider.handleCall('run_custom_query', {
+            query: 'SELECT * FROM nodes'
+        });
+
+        expect(mockDb.executeCustomQuery).toHaveBeenCalledWith('SELECT * FROM nodes');
+        expect(result?.content[0].text).toContain('TestNode');
+    });
+
+    it('should reject non-SELECT queries in run_custom_query', async () => {
+        const result = await provider.handleCall('run_custom_query', {
+            query: 'DELETE FROM nodes'
+        });
+
+        expect(result?.isError).toBe(true);
+        expect(result?.content[0].text).toContain('Only SELECT queries are allowed for security reasons.');
+    });
 });

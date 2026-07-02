@@ -76,6 +76,17 @@ export class GraphToolProvider implements ToolProvider {
                     },
                     required: ["category", "newType"]
                 }
+            },
+            {
+                name: "run_custom_query",
+                description: "Runs a custom SQL SELECT query against the knowledge graph database. Useful for complex filters or aggregations.",
+                inputSchema: {
+                    type: "object",
+                    properties: {
+                        query: { type: "string", description: "The SQL SELECT query to run (e.g., 'SELECT * FROM nodes')" }
+                    },
+                    required: ["query"]
+                }
             }
         ];
     }
@@ -139,6 +150,15 @@ export class GraphToolProvider implements ToolProvider {
                     this.graphService.newEdgeType(newType);
                 }
                 return { content: [{ type: "text", text: `Successfully added ${newType} to ${category} ontology.` }] };
+            }
+
+            if (name === "run_custom_query") {
+                const { query } = args;
+                if (!query.trim().toUpperCase().startsWith('SELECT')) {
+                    throw new Error("Only SELECT queries are allowed for security reasons.");
+                }
+                const results = this.database.executeCustomQuery(query);
+                return { content: [{ type: "text", text: JSON.stringify(results, null, 2) }] };
             }
 
             // If the tool name doesn't match any of ours, return null so the Router checks the next provider

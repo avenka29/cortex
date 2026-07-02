@@ -64,6 +64,10 @@ export class DatabaseService {
     return row ? row.content : null;
   }
 
+  public executeCustomQuery(sql: string): any[] {
+    return this.db.prepare(sql).all();
+  }
+
   // ==========================================
   // GRAPH ENGINE: Write Operations
   // ==========================================
