@@ -12,10 +12,25 @@ import { VectorToolProvider } from "./mcp/providers/VectorToolProvider.js";
 import fs from 'fs';
 import path from 'path';
 
-const args = process.argv.slice(2);
-const command = args[0] || 'start'; // default to MCP server for backwards compatibility
+export const PROVIDER_FILES: Record<string, string> = {
+    'cursor': '.cursorrules',
+    'antigravity': '.agents/AGENTS.md',
+    'copilot': '.github/copilot-instructions.md',
+    'windsurf': '.windsurfrules'
+};
 
-async function runCLI() {
+export const CORTEX_INSTRUCTIONS = `
+# --- Cortex MCP Instructions ---
+You are equipped with Cortex MCP tools. When interacting with this project, 
+automatically use the knowledge base (e.g. index_directory, search_entities) 
+whenever you see fit to understand the architecture or map new entities.
+# -------------------------------
+`;
+
+export async function runCLI() {
+    const args = process.argv.slice(2);
+    const command = args[0] || 'start'; // default to MCP server for backwards compatibility
+
     const configLoader = new ConfigLoader();
     configLoader.loadConfig();
 
@@ -24,6 +39,53 @@ async function runCLI() {
     graphService.loadGraph();
 
     if (command === 'init') {
+        const subCommand = args[1];
+
+        const applyInstructions = (filePath: string) => {
+            const absolutePath = path.resolve(process.cwd(), filePath);
+            const dir = path.dirname(absolutePath);
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir, { recursive: true });
+            }
+
+            if (fs.existsSync(absolutePath)) {
+                const content = fs.readFileSync(absolutePath, 'utf8');
+                if (!content.includes('Cortex MCP Instructions')) {
+                    fs.appendFileSync(absolutePath, '\n' + CORTEX_INSTRUCTIONS);
+                    console.log(`[Cortex] Appended instructions to existing ${filePath}`);
+                } else {
+                    console.log(`[Cortex] Instructions already present in ${filePath}`);
+                }
+            } else {
+                fs.writeFileSync(absolutePath, CORTEX_INSTRUCTIONS.trim() + '\n');
+                console.log(`[Cortex] Created and added instructions to ${filePath}`);
+            }
+        };
+
+        if (subCommand) {
+            if (PROVIDER_FILES[subCommand]) {
+                applyInstructions(PROVIDER_FILES[subCommand]);
+            } else if (subCommand.includes('.')) {
+                applyInstructions(subCommand);
+            } else {
+                console.error(`\n[Cortex] ❌ Unknown AI provider: '${subCommand}'`);
+                console.error(`Supported providers: ${Object.keys(PROVIDER_FILES).join(', ')}`);
+                console.error(`If you meant to specify a custom file, please include a file extension (e.g., 'cortex init custom-rules.md').\n`);
+                process.exit(1);
+            }
+        } else {
+            let found = false;
+            for (const file of Object.values(PROVIDER_FILES)) {
+                if (fs.existsSync(path.resolve(process.cwd(), file))) {
+                    applyInstructions(file);
+                    found = true;
+                }
+            }
+            if (!found) {
+                applyInstructions('cortex-instructions.md');
+            }
+        }
+
         console.log("[Cortex] Initialized .cortex/config.json and knowledge_graph.db successfully.");
         process.exit(0);
     } 
@@ -167,13 +229,36 @@ async function runCLI() {
         console.error("[Cortex] MCP Server successfully running on stdio transport.");
     }
     else {
-        console.error(`Unknown command: ${command}`);
-        console.error(`Available commands: start, init, index, query <term>, visualize`);
-        process.exit(1);
+        if (command === '--help' || command === '-h' || command === 'help') {
+            console.log(`
+Cortex MCP Knowledge Base CLI
+
+Usage: cortex <command> [options]
+
+Commands:
+  start                     Starts the MCP server (Default command)
+  init [provider|file]      Initializes the knowledge graph and injects AI instructions
+                            (e.g., 'cortex init cursor', 'cortex init my-rules.md')
+  index                     Auto-indexes markdown documentation in the current directory
+  query <term>              Performs a semantic search against the knowledge base
+  visualize                 Generates a premium HTML visualization of your topology
+
+Options:
+  -h, --help                Show this help message
+            `);
+            process.exit(0);
+        } else {
+            console.error(`\n[Cortex] ❌ Unknown command: '${command}'`);
+            console.error(`Run 'cortex --help' to see a list of available commands.\n`);
+            process.exit(1);
+        }
     }
 }
 
-runCLI().catch(e => {
-    console.error("[Cortex] Fatal error:", e);
-    process.exit(1);
-});
+// Only auto-run if this file is the main entry point (not imported in a test)
+if (process.argv[1] && (process.argv[1].endsWith('cli.ts') || process.argv[1].endsWith('cli.js') || process.argv[1].includes('.bin'))) {
+    runCLI().catch(e => {
+        console.error("[Cortex] Fatal error:", e);
+        process.exit(1);
+    });
+}
