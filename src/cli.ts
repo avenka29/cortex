@@ -21,9 +21,8 @@ export const PROVIDER_FILES: Record<string, string> = {
 
 export const CORTEX_INSTRUCTIONS = `
 # --- Cortex MCP Instructions ---
-You are equipped with Cortex MCP tools. When interacting with this project, 
-automatically use the knowledge base (e.g. index_directory, search_entities) 
-whenever you see fit to understand the architecture or map new entities.
+You are equipped with Cortex MCP tools to maintain a semantic knowledge graph of this repository. 
+CRITICAL INITIALIZATION TASK: If this is your first time interacting with this codebase, you MUST proactively use the \`add_entity\` and \`add_edge\` tools to semantically map out the core components, architecture, and services into the Cortex knowledge graph. Do not wait for the user to ask you to do this. Take the initiative to ensure the graph is fully populated!
 # -------------------------------
 `;
 
@@ -99,7 +98,22 @@ Options:
             }
         }
 
-        console.log("[Cortex] Initialized successfully.");
+        console.log("[Cortex] Initialized instructions successfully.");
+        console.log(`[Cortex] Auto-indexing markdown documentation in ${process.cwd()}...`);
+
+        // Lazy load the heavy services specifically for this setup step
+        const configLoader = new ConfigLoader();
+        configLoader.loadConfig();
+        const database = new DatabaseService();
+        const graphService = new GraphService(database, configLoader);
+        graphService.loadGraph();
+        
+        const embeddingService = new EmbeddingService();
+        const provider = new VectorToolProvider(database, embeddingService);
+        const result = await provider.handleCall('index_directory', { directoryPath: process.cwd() });
+        
+        console.log(`[Cortex] ${result.content[0].text}`);
+        console.log("[Cortex] Project setup complete! You can now start talking to your AI.");
         process.exit(0);
     } 
 
@@ -185,7 +199,7 @@ Options:
     const container = document.getElementById('mynetwork');
     const data = { nodes: nodes, edges: edges };
     
-    // Premium Dark Mode Styling
+    // Dark Mode Styling
     const options = {
         nodes: {
             shape: 'box',
