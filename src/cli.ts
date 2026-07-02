@@ -196,9 +196,8 @@ export async function runCLI() {
         
         const outPath = path.join(process.cwd(), '.cortex', 'graph.html');
         fs.writeFileSync(outPath, html);
-        console.log(`[Cortex] 🚀 Premium Visualization generated at:`);
-        console.log(`         ${outPath}`);
-        console.log(`\nOpen this file in your web browser to interact with your architecture!`);
+        console.log(`[Cortex] Visualization generated at: ${outPath}`);
+        console.log(`Open this file in your web browser to view the graph.`);
         process.exit(0);
     }
     else if (command === 'start') {
@@ -239,9 +238,9 @@ Commands:
   start                     Starts the MCP server (Default command)
   init [provider|file]      Initializes the knowledge graph and injects AI instructions
                             (e.g., 'cortex init cursor', 'cortex init my-rules.md')
-  index                     Auto-indexes markdown documentation in the current directory
+  index                     Indexes markdown documentation in the current directory
   query <term>              Performs a semantic search against the knowledge base
-  visualize                 Generates a premium HTML visualization of your topology
+  visualize                 Generates an HTML visualization of the graph topology
 
 Options:
   -h, --help                Show this help message
